@@ -24,6 +24,12 @@ add_library (${CUSTOM_JUANGUI_WRAPPER}
 target_link_libraries(${CUSTOM_JUANGUI_WRAPPER} juangui_wrapper)
 
 
+add_library(my_yaml_reader
+           ${CMAKE_CURRENT_SOURCE_DIR}/utils/my_yaml_reader.h
+           ${CMAKE_CURRENT_SOURCE_DIR}/utils/my_yaml_reader.cpp
+            )
+target_link_libraries(my_yaml_reader yaml-cpp::yaml-cpp)
+
 
 
 include(FetchContent)
@@ -55,8 +61,9 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       juancho-tools
                       OpenGL::GL
                       ${CUSTOM_JUANGUI_WRAPPER}
+                      my_yaml_reader
                       yaml-cpp::yaml-cpp
-                  )
+                      )
 endif()
 
 if(APPLE)
@@ -69,17 +76,19 @@ if(APPLE)
                           ${CUSTOM_JUANGUI_WRAPPER}
                           juancho-tools
                           glfw
+                          my_yaml_reader
+                          yaml-cpp::yaml-cpp
                           "-framework Cocoa"
                           "-framework OpenGL"
-                          "-framework IOKit")
+                          "-framework IOKit")                       
 endif()
 
-target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
-    FONT_RESOURCE_DIR="${IMGUI_TEMPLATE_DIR}/fonts/Ubuntu/Ubuntu-Regular.ttf")
+#target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
+#    FONT_RESOURCE_DIR="${IMGUI_TEMPLATE_DIR}/fonts/Ubuntu/Ubuntu-Regular.ttf")
 
-target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
-    CAPI_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/capi.jpg")
+
 
 set(ASSETS ${CMAKE_CURRENT_SOURCE_DIR}/assets/)
+set(CFG ${CMAKE_CURRENT_SOURCE_DIR}/cfg/)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/my_custom_definitions.h.in
                ${CMAKE_CURRENT_SOURCE_DIR}/utils/my_custom_definitions.h)

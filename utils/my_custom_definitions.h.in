@@ -6,3 +6,10 @@ std::string get_assets_folder_path()
 {
     return std::string("@ASSETS@");
 }
+
+
+std::string get_cfg_folder_path()
+{
+    return std::string("@CFG@");
+}
+
