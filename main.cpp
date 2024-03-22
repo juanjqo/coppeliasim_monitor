@@ -15,7 +15,7 @@ int main()
     parameters.font_size = 25;
 
     ImguiCoppeliaSimInterface imgui_coppeliasim_interface(parameters);
-    imgui_coppeliasim_interface.set_capi_path(CAPI_RESOURCE_DIR);
+
 
     imgui_coppeliasim_interface.loop();
 

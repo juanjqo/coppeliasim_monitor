@@ -1,5 +1,5 @@
 #include "imgui_coppeliasim_interface.h"
-
+#include <my_custom_definitions.h>
 
 ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_parameters &parameters)
 :JuanGui_Wrapper(parameters)
@@ -20,7 +20,8 @@ void ImguiCoppeliaSimInterface::my_custom_gui()
         int my_image_width = 0;
         int my_image_height = 0;
         GLuint my_image_texture = 0;
-        bool ret = LoadTextureFromFile(capi_path_.c_str(), &my_image_texture, &my_image_width, &my_image_height);
+        std::string capi_path = get_assets_folder_path() + std::string("images/capi.jpg");
+        bool ret = LoadTextureFromFile(capi_path.c_str(), &my_image_texture, &my_image_width, &my_image_height);
         IM_ASSERT(ret);
 
         ImGui::Begin("OpenGL Texture Text");
@@ -31,7 +32,3 @@ void ImguiCoppeliaSimInterface::my_custom_gui()
     }
 }
 
-void ImguiCoppeliaSimInterface::set_capi_path(const std::string &my_path)
-{
-    capi_path_ = my_path;
-}

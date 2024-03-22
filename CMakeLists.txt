@@ -80,6 +80,6 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
 target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
     CAPI_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/capi.jpg")
 
-set(ASSETS ${CMAKE_PROJECT_NAME}/assets/)
-configure_file(${CMAKE_PROJECT_NAME}/utils/my_custom_definitions.h.in
-               ${CMAKE_PROJECT_NAME}/utils/my_custom_definitions.h)
+set(ASSETS ${CMAKE_CURRENT_SOURCE_DIR}/assets/)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/my_custom_definitions.h.in
+               ${CMAKE_CURRENT_SOURCE_DIR}/utils/my_custom_definitions.h)
