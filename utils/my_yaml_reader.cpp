@@ -21,11 +21,13 @@ void MyYamlReader::_start_settings()
             auto name = dict["Parameters"];
             std::cout<< name<< std::endl;
             for(auto pos : name) {
-                auto raw_ip= pos["ip"].as<std::string>();
-                auto raw_port = pos["port"].as<double>();
-                auto raw_jointnames = pos["jointnames"].as<std::vector<std::string>>();
-                auto raw_q_min = pos["q_min"].as<std::vector<double>>();
-                auto raw_q_max = pos["q_max"].as<std::vector<double>>();
+                ip_ = pos["ip"].as<std::string>();
+                port_ = static_cast<int>(pos["port"].as<double>());
+                jointnames_ = pos["jointnames"].as<std::vector<std::string>>();
+                q_min_ = pos["q_min"].as<std::vector<double>>();
+                q_max_ = pos["q_max"].as<std::vector<double>>();
+
+
                 //auto raw_cs_entity_robot = pos["cs_entity_robot"].as<std::string>() ;
                 //auto raw_entity_environment_primitive_type =  pos["entity_environment_primitive_type"].as<std::string>();
                 //auto raw_entity_robot_primitive_type = pos["entity_robot_primitive_type"].as<std::string>();
@@ -58,21 +60,7 @@ void MyYamlReader::_start_settings()
 
                 */
                 i++;
-                std::cout<<"ip: "<<raw_ip<<std::endl;
-                std::cout<<"port: "<<raw_port<<std::endl;
 
-                for(int jj=0;jj<raw_jointnames.size();jj++)
-                {
-                std::cout<<"jointnames: "<<raw_jointnames.at(jj)<<std::endl;
-                }
-                for(int jj=0;jj<raw_q_min.size();jj++)
-                {
-                    std::cout<<"q_min: "<<raw_q_min.at(jj)<<std::endl;
-                }
-                for(int jj=0;jj<raw_q_max.size();jj++)
-                {
-                    std::cout<<"q_max: "<<raw_q_max.at(jj)<<std::endl;
-                }
             }
 
         }
