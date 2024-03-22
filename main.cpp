@@ -8,7 +8,7 @@ int main()
     juangui_wrapper_parameters parameters;
     parameters.width = 1280;
     parameters.height = 720;
-    parameters.title = "Juanchotronics";
+    parameters.title = "CoppeliaSim Commander by Juancho";
     parameters.screen_mode = "LIGHT_MODE";
     parameters.font_path = FONT_RESOURCE_DIR;
     parameters.font_size = 25;
