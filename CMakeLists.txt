@@ -19,8 +19,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils/)
 
 set(CUSTOM_JUANGUI_WRAPPER imgui_coppeliasim_interface)
 add_library (${CUSTOM_JUANGUI_WRAPPER}
-             ${CUSTOM_JUANGUI_WRAPPER}.h
-             ${CUSTOM_JUANGUI_WRAPPER}.cpp)
+             ${CMAKE_CURRENT_SOURCE_DIR}/utils/${CUSTOM_JUANGUI_WRAPPER}.h
+             ${CMAKE_CURRENT_SOURCE_DIR}/utils/${CUSTOM_JUANGUI_WRAPPER}.cpp)
 target_link_libraries(${CUSTOM_JUANGUI_WRAPPER} juangui_wrapper)
 
 
