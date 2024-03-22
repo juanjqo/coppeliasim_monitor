@@ -4,7 +4,7 @@
 ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_parameters &parameters)
 :JuanGui_Wrapper(parameters)
 {
-    std::string config_yaml = get_cfg_folder_path() + std::string("config.yaml");
+    std::string config_yaml = get_cfg_folder_path() + std::string("config_test.yaml");
     //std::string config_yaml = "/home/juanjqo/git/coppeliasim_commander/cfg/config.yaml";
     bool status_config_path = std::filesystem::exists(config_yaml);
 
