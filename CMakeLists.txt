@@ -76,3 +76,6 @@ endif()
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
     FONT_RESOURCE_DIR="${IMGUI_TEMPLATE_DIR}/fonts/Ubuntu/Ubuntu-Regular.ttf")
+
+target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
+    CAPI_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/capi.jpg")
