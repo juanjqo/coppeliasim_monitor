@@ -15,7 +15,7 @@ set(IMGUI_TEMPLATE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/submodules/imgui_template)
 include(${IMGUI_TEMPLATE_DIR}/dependencies.cmake)
 
 include_directories(${IMGUI_TEMPLATE_DIR}/commons/)
-
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils/)
 
 set(CUSTOM_JUANGUI_WRAPPER imgui_coppeliasim_interface)
 add_library (${CUSTOM_JUANGUI_WRAPPER}
@@ -79,3 +79,7 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
     CAPI_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/capi.jpg")
+
+set(ASSETS ${CMAKE_PROJECT_NAME}/assets/)
+configure_file(${CMAKE_PROJECT_NAME}/utils/my_custom_definitions.h.in
+               ${CMAKE_PROJECT_NAME}/utils/my_custom_definitions.h)
