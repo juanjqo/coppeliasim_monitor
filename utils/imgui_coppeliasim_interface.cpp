@@ -21,7 +21,20 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
     vi_ = std::make_shared<DQ_VrepInterface>();
 }
 
+void ImguiCoppeliaSimInterface::_check_parameter_sizes()
+{
+    if (q_min_.size() != q_max_.size())
+    {
 
+    }
+}
+
+void ImguiCoppeliaSimInterface::_stop_app()
+{
+    deinitialize_coppeliasim();
+    disconnect_coppeliasim();
+    this->JuanGui_Wrapper::stop_and_quit(true);
+}
 
 void ImguiCoppeliaSimInterface::my_custom_gui()
 {
@@ -175,6 +188,8 @@ void  ImguiCoppeliaSimInterface::_finish_echo_robot_state()
 
 
 
+
+
 void ImguiCoppeliaSimInterface::show_main_menu_bar()
 {
     if (ImGui::BeginMainMenuBar())
@@ -185,21 +200,22 @@ void ImguiCoppeliaSimInterface::show_main_menu_bar()
             if (ImGui::MenuItem("Load configuration file")) {}
             ImGui::Separator();
             if (ImGui::MenuItem("Quit"))
-            {
-                deinitialize_coppeliasim();
-                disconnect_coppeliasim();
-                this->JuanGui_Wrapper::stop_and_quit(true);
-            }
+                show_exit_window_ = true;
+
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Help"))
         {
             if (ImGui::MenuItem("User Manual")) {}
             if (ImGui::MenuItem("About CoppeliaSim Monitor")) {}
-            if (ImGui::MenuItem("Credits")) {}
+            if (ImGui::MenuItem("Credits")) {
+                set_message_window_parameters(true, "Juan Jose Quiroz Omana");
+            }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
+        show_message_window();
+        show_exit_window();
     }
 }
 
@@ -223,6 +239,42 @@ void ImguiCoppeliaSimInterface::show_coppeliasim_app_parameters()
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
 
+}
+
+
+void ImguiCoppeliaSimInterface::set_message_window_parameters(const bool &flag, const std::string &msg)
+{
+    show_message_window_ = flag;
+    message_window_ = msg;
+}
+
+void ImguiCoppeliaSimInterface::show_message_window()
+{
+    // 3. Show another simple window.
+
+    if (show_message_window_)
+    {
+        ImGui::Begin("Message", &show_message_window_);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        ImGui::Text("%s", message_window_.c_str());
+        if (ImGui::Button("Ok"))
+            show_message_window_ = false;
+        ImGui::End();
+    }
+}
+
+void ImguiCoppeliaSimInterface::show_exit_window()
+{
+    if (show_exit_window_ )
+    {
+        ImGui::Begin("Message", &show_exit_window_ );   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        ImGui::Text("%s", std::string("Do you want to exit?").c_str());
+        if (ImGui::Button("Yes"))
+            _stop_app();
+        ImGui::SameLine();
+        if (ImGui::Button("No"))
+            show_exit_window_  = false;
+        ImGui::End();
+    }
 }
 
 

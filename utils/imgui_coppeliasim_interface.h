@@ -25,12 +25,22 @@ protected:
     std::string status_msg_;
     std::shared_ptr<DQ_VrepInterface> vi_;
 
+    bool show_message_window_ = false;
+    std::string message_window_;
+    void set_message_window_parameters(const bool& flag, const std::string& msg);
+
+    bool show_exit_window_ = false;
+
 
     void _start_echo_robot_state_mode();
     std::thread echo_robot_state_mode_thread_;
     void _start_echo_robot_state_mode_thread();
     std::atomic<bool> finish_echo_robot_state_;
     void _finish_echo_robot_state();
+
+    void _check_parameter_sizes();
+
+    void _stop_app();
 
 public:
 
@@ -41,6 +51,9 @@ public:
     void my_custom_gui() override;
     void show_main_menu_bar();
     void show_coppeliasim_app_parameters();
+
+    void show_message_window();
+    void show_exit_window();
 
     void create_sas_driver_buttons();
 
