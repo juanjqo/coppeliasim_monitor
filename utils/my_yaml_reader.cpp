@@ -83,3 +83,26 @@ MyYamlReader::MyYamlReader(const std::string &config_path)
     config_path_ = config_path;
     _start_settings();
 }
+
+std::string MyYamlReader::get_ip()
+{
+    return ip_;
+}
+
+std::vector<std::string> MyYamlReader::get_jointnames()
+{
+    return jointnames_;
+}
+
+
+std::tuple<VectorXd, VectorXd> MyYamlReader::get_joint_limits()
+{
+    Eigen::VectorXd q_min_v = JuanchoTools::std_vector_to_eigen_vector(q_min_);
+    Eigen::VectorXd q_max_v = JuanchoTools::std_vector_to_eigen_vector(q_max_);
+    return {q_min_v, q_max_v};
+}
+
+int MyYamlReader::get_port()
+{
+    return port_;
+}

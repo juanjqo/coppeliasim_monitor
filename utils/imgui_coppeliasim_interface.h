@@ -11,6 +11,11 @@ class ImguiCoppeliaSimInterface: public JuanGui_Wrapper
 {
 protected:
     std::shared_ptr<MyYamlReader> my_yaml_reader_ptr_;
+    std::string ip_;
+    std::vector<std::string> jointnames_;
+    Eigen::VectorXd q_min_;
+    Eigen::VectorXd q_max_;
+    int port_;
 public:
 
     ImguiCoppeliaSimInterface(const juangui_wrapper_parameters& parameters);

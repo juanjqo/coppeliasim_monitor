@@ -6,20 +6,29 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
 {
     std::string config_yaml = get_cfg_folder_path() + std::string("config_test.yaml");
     //std::string config_yaml = "/home/juanjqo/git/coppeliasim_commander/cfg/config.yaml";
-    bool status_config_path = std::filesystem::exists(config_yaml);
+    if (!std::filesystem::exists(config_yaml))
+    {
+        std::cerr<<"Wrong yaml path file. "<<std::endl;
+    }
 
     my_yaml_reader_ptr_ = std::make_shared<MyYamlReader>(config_yaml);
+    ip_ = my_yaml_reader_ptr_->get_ip();
+    port_ = my_yaml_reader_ptr_->get_port();
+    jointnames_ = my_yaml_reader_ptr_->get_jointnames();
+    std::tie(q_min_, q_max_) = my_yaml_reader_ptr_->get_joint_limits();
 }
 
 
 
 void ImguiCoppeliaSimInterface::my_custom_gui()
 {
-    ImGui::Begin("Hello, Juanchito 2!");
+    ImGui::Begin("CoppeliaSim Parameters");
+
+    ImGui::Text(ip_.c_str());
 
     ImGui::End();
 
-    ImGui::Begin("Camila la bobita");
+    ImGui::Begin("In construction");
     ImGui::End();
 
     {

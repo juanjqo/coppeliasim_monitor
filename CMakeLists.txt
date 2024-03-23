@@ -28,7 +28,7 @@ add_library(my_yaml_reader
            ${CMAKE_CURRENT_SOURCE_DIR}/utils/my_yaml_reader.h
            ${CMAKE_CURRENT_SOURCE_DIR}/utils/my_yaml_reader.cpp
             )
-target_link_libraries(my_yaml_reader yaml-cpp::yaml-cpp)
+target_link_libraries(my_yaml_reader yaml-cpp::yaml-cpp juancho-tools)
 
 
 

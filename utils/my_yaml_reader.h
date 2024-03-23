@@ -2,6 +2,7 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 #include <Eigen/Dense>
+#include <juancho_tools.h>
 
 class MyYamlReader
 {
@@ -20,6 +21,7 @@ public:
     std::string get_ip();
     std::vector<std::string> get_jointnames();
     std::tuple<Eigen::VectorXd, Eigen::VectorXd> get_joint_limits();
+    int get_port();
 };
 
 
