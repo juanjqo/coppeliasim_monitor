@@ -25,6 +25,8 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
 
 void ImguiCoppeliaSimInterface::my_custom_gui()
 {
+    ShowExampleAppMainMenuBar();
+
     ImGui::Begin("CoppeliaSim");
     ImGui::SeparatorText("");
     //ImVec2 size = ImVec2(32.0f, 32.0f);
@@ -201,4 +203,32 @@ void  ImguiCoppeliaSimInterface::_finish_echo_robot_state()
     status_msg_ = "Finishing echo robot state.";
     finish_echo_robot_state_ = true;
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+}
+
+
+
+void ImguiCoppeliaSimInterface::ShowExampleAppMainMenuBar()
+{
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            //ShowExampleMenuFile();
+            if (ImGui::MenuItem("Load configuration file", "CTRL+Z")) {}
+            ImGui::Separator();
+            if (ImGui::MenuItem("Quit"))
+            {
+
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Help"))
+        {
+            if (ImGui::MenuItem("User Manual")) {}
+            if (ImGui::MenuItem("About CoppeliaSim Monitor")) {}
+            if (ImGui::MenuItem("Credits")) {}
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
 }
