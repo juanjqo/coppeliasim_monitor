@@ -21,6 +21,8 @@ protected:
     Eigen::VectorXd q_;
     Eigen::VectorXd q_dot_;
 
+    int n_joints_;
+
     int port_;
     std::string status_msg_;
     std::shared_ptr<DQ_VrepInterface> vi_;
@@ -51,6 +53,7 @@ public:
     void my_custom_gui() override;
     void show_main_menu_bar();
     void show_coppeliasim_app_parameters();
+    void show_table_parameters();
 
     void show_message_window();
     void show_exit_window();

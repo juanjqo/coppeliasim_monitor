@@ -17,16 +17,21 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
     port_ = my_yaml_reader_ptr_->get_port();
     jointnames_ = my_yaml_reader_ptr_->get_jointnames();
     std::tie(q_min_, q_max_) = my_yaml_reader_ptr_->get_joint_limits();
-
+    _check_parameter_sizes();
     vi_ = std::make_shared<DQ_VrepInterface>();
 }
 
 void ImguiCoppeliaSimInterface::_check_parameter_sizes()
 {
-    if (q_min_.size() != q_max_.size())
+    if (q_min_.size() != q_max_.size() or q_min_.size() != jointnames_.size())
     {
-
+        throw std::runtime_error("Incorrect size of q_min and q_max or jointnames. ");
     }
+
+    n_joints_ = jointnames_.size();
+    q_ = Eigen::VectorXd::Zero(n_joints_);
+    q_dot_= Eigen::VectorXd::Zero(n_joints_);
+
 }
 
 void ImguiCoppeliaSimInterface::_stop_app()
@@ -40,7 +45,7 @@ void ImguiCoppeliaSimInterface::my_custom_gui()
 {
     show_main_menu_bar();
     show_coppeliasim_app_parameters();
-
+    show_table_parameters();
 
   /*
     {
@@ -242,6 +247,7 @@ void ImguiCoppeliaSimInterface::show_coppeliasim_app_parameters()
 }
 
 
+
 void ImguiCoppeliaSimInterface::set_message_window_parameters(const bool &flag, const std::string &msg)
 {
     show_message_window_ = flag;
@@ -279,15 +285,24 @@ void ImguiCoppeliaSimInterface::show_exit_window()
 
 
 
-/*
-if (ImGui::BeginTable("split", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
+
+void ImguiCoppeliaSimInterface::show_table_parameters()
 {
-    for (int i = 0; i < 100; i++)
+    std::vector<Eigen::VectorXd> q_table(3, VectorXd::Zero(n_joints_));
+
+
+    ImGui::Begin("Joint Positions");
+    if (ImGui::BeginTable("split", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
     {
-        char buf[32];
-        sprintf(buf, "%03d", i);
-        ImGui::TableNextColumn();
-        ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f));
+        for (int i = 0; i < 15; i++)
+        {
+            char buf[32];
+            sprintf(buf, "%03d", i);
+            ImGui::TableNextColumn();
+            ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f));
+        }
+        ImGui::EndTable();
     }
-    ImGui::EndTable();
-*/
+    ImGui::End();
+
+}

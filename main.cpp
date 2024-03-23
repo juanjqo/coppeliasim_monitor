@@ -9,7 +9,7 @@ int main()
     juangui_wrapper_parameters parameters;
     parameters.width = 1920;
     parameters.height = 1080;
-    parameters.title = "CoppeliaSim Commander by Juancho";
+    parameters.title = "CoppeliaSim Commander by Juan Jose Quiroz Omana";
     parameters.screen_mode = "LIGHT_MODE";
     parameters.font_path = "default";
     parameters.font_size = 25;
