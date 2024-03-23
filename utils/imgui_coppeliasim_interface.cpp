@@ -22,15 +22,52 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
 
 void ImguiCoppeliaSimInterface::my_custom_gui()
 {
-    ImGui::Begin("CoppeliaSim Parameters");
+    ImGui::Begin("CoppeliaSim");
+    ImGui::SeparatorText("");
+    //ImVec2 size = ImVec2(32.0f, 32.0f);
+    ImVec4 my_color = ImVec4(0.13f, 0.26f, 0.40f, 1.0f);
 
-    ImGui::Text(ip_.c_str());
+    ImGui::Text(std::string("ip:   " + ip_).c_str());
+     ImGui::Spacing();
+    ImGui::Text(std::string("port: " + std::to_string(port_)).c_str());
 
+    ImGui::SeparatorText("");
+    static bool connect_status = false;
+
+
+    static int always_on = 1;
+    ImGui::RadioButton("C", &always_on, 0);
+    ImGui::SameLine();
+    ImGui::Button("Connect");
+    ImGui::Button("Initialize");
+    ImGui::Button("Deinitialize");
+    ImGui::Button("Disconnect");
+    //ImGui::ColorButton("Hola", ImVec4(0.13f, 0.26f, 0.40f, 1.0f), ImGuiColorEditFlags_None, ImVec2(40, 40));
+
+    ImGui::SeparatorText("");
+
+    static bool disabled = false;
+    ImGui::Checkbox("Disable", &disabled);
+    if (disabled)
+    {
+        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+    }
+    if (disabled)
+    {
+        ImGui::PopItemFlag();
+        ImGui::PopStyleVar();
+    }
+
+
+
+
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
 
     ImGui::Begin("In construction");
     ImGui::End();
-
+  /*
     {
         int my_image_width = 0;
         int my_image_height = 0;
@@ -45,5 +82,6 @@ void ImguiCoppeliaSimInterface::my_custom_gui()
         ImGui::Image((void*)(intptr_t)my_image_texture, ImVec2(my_image_width, my_image_height));
         ImGui::End();
     }
+*/
 }
 
