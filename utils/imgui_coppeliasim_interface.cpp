@@ -289,12 +289,21 @@ void ImguiCoppeliaSimInterface::show_exit_window()
 void ImguiCoppeliaSimInterface::show_table_parameters()
 {
     std::vector<Eigen::VectorXd> q_table(3, VectorXd::Zero(n_joints_));
+    q_table.at(0) = q_min_;
+    q_table.at(1) = q_;
+    q_table.at(2) = q_max_;
+    for(auto& num : q_table)
+    {
+
+        std::cout<<num.transpose()<<std::endl;
+    }
+
 
 
     ImGui::Begin("Joint Positions");
     if (ImGui::BeginTable("split", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
     {
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 3*n_joints_; i++)
         {
             char buf[32];
             sprintf(buf, "%03d", i);
