@@ -25,26 +25,16 @@ void ImguiCoppeliaSimInterface::my_custom_gui()
     ImGui::Begin("CoppeliaSim");
     ImGui::SeparatorText("");
     //ImVec2 size = ImVec2(32.0f, 32.0f);
-    ImVec4 my_color = ImVec4(0.13f, 0.26f, 0.40f, 1.0f);
+    //ImVec4 my_color = ImVec4(0.13f, 0.26f, 0.40f, 1.0f);
 
-    ImGui::Text(std::string("ip:   " + ip_).c_str());
-     ImGui::Spacing();
-    ImGui::Text(std::string("port: " + std::to_string(port_)).c_str());
-
+    ImGui::Text("%s", std::string("ip:   " + ip_).c_str());
+    ImGui::Spacing();
+    ImGui::Text("%s", std::string("port: " + std::to_string(port_)).c_str());
     ImGui::SeparatorText("");
-    static bool connect_status = false;
-
-
-    static int always_on = 1;
-    ImGui::RadioButton("C", &always_on, 0);
-    ImGui::SameLine();
-    ImGui::Button("Connect");
-    ImGui::Button("Initialize");
-    ImGui::Button("Deinitialize");
-    ImGui::Button("Disconnect");
-    //ImGui::ColorButton("Hola", ImVec4(0.13f, 0.26f, 0.40f, 1.0f), ImGuiColorEditFlags_None, ImVec2(40, 40));
-
+    create_sas_driver_buttons();
     ImGui::SeparatorText("");
+
+
 
     static bool disabled = false;
     ImGui::Checkbox("Disable", &disabled);
@@ -65,8 +55,7 @@ void ImguiCoppeliaSimInterface::my_custom_gui()
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
 
-    ImGui::Begin("In construction");
-    ImGui::End();
+
   /*
     {
         int my_image_width = 0;
@@ -83,5 +72,53 @@ void ImguiCoppeliaSimInterface::my_custom_gui()
         ImGui::End();
     }
 */
+}
+
+void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
+{
+    static bool button_connect_disable = false;
+    static bool button_initialize_disable = true;
+    static bool button_deinitialize_disable = true;
+    static bool button_disconnect_disable = true;
+
+
+
+    ImGui::BeginDisabled(button_connect_disable);
+    if (ImGui::Button("Connect"))
+    {
+        button_connect_disable   = true;
+        button_initialize_disable = false;
+        status_msg_ = "connecting...";
+    }
+    ImGui::EndDisabled();
+
+    ImGui::BeginDisabled(button_initialize_disable);
+    if (ImGui::Button("Initialize"))
+    {
+        button_initialize_disable = true;
+        button_deinitialize_disable = false;
+        status_msg_ = "initializing...";
+
+    }
+    ImGui::EndDisabled();
+
+    ImGui::BeginDisabled(button_deinitialize_disable);
+    if (ImGui::Button("Deinitialize"))
+    {
+        button_deinitialize_disable = true;
+        button_disconnect_disable = false;
+        status_msg_ = "deinitializing...";
+    }
+    ImGui::EndDisabled();
+
+    ImGui::BeginDisabled(button_disconnect_disable);
+    if (ImGui::Button("Disconnect"))
+    {
+        status_msg_ = "disconnecting...";
+    }
+    ImGui::EndDisabled();
+    ImGui::SeparatorText("");
+    ImGui::Text("%s", std::string("Status:   " + status_msg_).c_str());
+    ImGui::SeparatorText("");
 }
 

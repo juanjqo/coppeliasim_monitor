@@ -16,6 +16,7 @@ protected:
     Eigen::VectorXd q_min_;
     Eigen::VectorXd q_max_;
     int port_;
+    std::string status_msg_;
 public:
 
     ImguiCoppeliaSimInterface(const juangui_wrapper_parameters& parameters);
@@ -25,7 +26,7 @@ public:
     void my_custom_gui() override;
 
 
-
+    void create_sas_driver_buttons();
     //void signal_generator();
 
     //void Demo_RealtimePlots();
