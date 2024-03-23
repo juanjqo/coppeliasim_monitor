@@ -218,7 +218,9 @@ void ImguiCoppeliaSimInterface::ShowExampleAppMainMenuBar()
             ImGui::Separator();
             if (ImGui::MenuItem("Quit"))
             {
-
+                deinitialize_coppeliasim();
+                disconnect_coppeliasim();
+                this->stop_and_quit(true);
             }
             ImGui::EndMenu();
         }

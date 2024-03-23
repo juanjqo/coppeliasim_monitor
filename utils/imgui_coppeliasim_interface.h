@@ -39,7 +39,7 @@ public:
 
 
     void my_custom_gui() override;
-    static void ShowExampleAppMainMenuBar();
+    void ShowExampleAppMainMenuBar();
 
 
     void create_sas_driver_buttons();
