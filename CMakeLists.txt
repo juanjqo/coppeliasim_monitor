@@ -21,7 +21,7 @@ set(CUSTOM_JUANGUI_WRAPPER imgui_coppeliasim_interface)
 add_library (${CUSTOM_JUANGUI_WRAPPER}
              ${CMAKE_CURRENT_SOURCE_DIR}/utils/${CUSTOM_JUANGUI_WRAPPER}.h
              ${CMAKE_CURRENT_SOURCE_DIR}/utils/${CUSTOM_JUANGUI_WRAPPER}.cpp)
-target_link_libraries(${CUSTOM_JUANGUI_WRAPPER} juangui_wrapper)
+target_link_libraries(${CUSTOM_JUANGUI_WRAPPER} juangui_wrapper dqrobotics-interface-vrep)
 
 
 add_library(my_yaml_reader

@@ -1,6 +1,7 @@
 #include "imgui_coppeliasim_interface.h"
 #include <my_custom_definitions.h>
 
+
 ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_parameters &parameters)
 :JuanGui_Wrapper(parameters)
 {
@@ -16,6 +17,8 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
     port_ = my_yaml_reader_ptr_->get_port();
     jointnames_ = my_yaml_reader_ptr_->get_jointnames();
     std::tie(q_min_, q_max_) = my_yaml_reader_ptr_->get_joint_limits();
+
+    vi_ = std::make_shared<DQ_VrepInterface>();
 }
 
 
@@ -89,6 +92,7 @@ void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
         button_connect_disable   = true;
         button_initialize_disable = false;
         status_msg_ = "connecting...";
+        connect_coppeliasim();
     }
     ImGui::EndDisabled();
 
@@ -98,7 +102,7 @@ void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
         button_initialize_disable = true;
         button_deinitialize_disable = false;
         status_msg_ = "initializing...";
-
+        initialize_coppeliasim();
     }
     ImGui::EndDisabled();
 
@@ -108,6 +112,7 @@ void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
         button_deinitialize_disable = true;
         button_disconnect_disable = false;
         status_msg_ = "deinitializing...";
+        deinitialize_coppeliasim();
     }
     ImGui::EndDisabled();
 
@@ -115,6 +120,7 @@ void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
     if (ImGui::Button("Disconnect"))
     {
         status_msg_ = "disconnecting...";
+        disconnect_coppeliasim();
     }
     ImGui::EndDisabled();
     ImGui::SeparatorText("");
@@ -122,3 +128,77 @@ void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
     ImGui::SeparatorText("");
 }
 
+void ImguiCoppeliaSimInterface::connect_coppeliasim()
+{
+    try
+    {
+        if (!vi_->connect(ip_, port_,100,10))
+            throw std::runtime_error("Unable to connect to CoppeliaSim.");
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        status_msg_ = "connected!";
+    }
+    catch (std::exception& e)
+    {
+        std::cout<<e.what()<<std::endl;
+        vi_->stop_simulation();
+        vi_->disconnect();
+    }
+}
+
+void ImguiCoppeliaSimInterface::initialize_coppeliasim()
+{
+    vi_->start_simulation();
+    status_msg_ = "Initialized!";
+    _start_echo_robot_state_mode_thread();
+}
+
+void ImguiCoppeliaSimInterface::deinitialize_coppeliasim()
+{
+    vi_->stop_simulation();
+    status_msg_ = "Deinitialized!";
+    _finish_echo_robot_state();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    if (echo_robot_state_mode_thread_.joinable())
+    {
+        echo_robot_state_mode_thread_.join();
+    }
+
+}
+
+void ImguiCoppeliaSimInterface::disconnect_coppeliasim()
+{
+   vi_->disconnect();
+    status_msg_ = "Disconnected!";
+}
+
+void ImguiCoppeliaSimInterface::_start_echo_robot_state_mode()
+{
+    while(!finish_echo_robot_state_)
+    {
+        q_ = vi_->get_joint_positions(jointnames_);
+        q_dot_ = vi_->get_joint_velocities(jointnames_);
+    }
+    status_msg_ = "Finished echo robot state.";
+}
+
+
+
+void  ImguiCoppeliaSimInterface::_start_echo_robot_state_mode_thread()
+{
+    finish_echo_robot_state_ = false;
+    status_msg_ = "Checking echo robot state thread";
+    if (echo_robot_state_mode_thread_.joinable())
+    {
+        echo_robot_state_mode_thread_.join();
+    }
+    status_msg_ ="Starting echo robot state thread";
+    echo_robot_state_mode_thread_ = std::thread(&ImguiCoppeliaSimInterface::_start_echo_robot_state_mode, this);
+}
+
+
+void  ImguiCoppeliaSimInterface::_finish_echo_robot_state()
+{
+    status_msg_ = "Finishing echo robot state.";
+    finish_echo_robot_state_ = true;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+}
