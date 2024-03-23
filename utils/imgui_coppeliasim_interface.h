@@ -20,6 +20,8 @@ protected:
     Eigen::VectorXd q_max_;
     Eigen::VectorXd q_;
     Eigen::VectorXd q_dot_;
+    Eigen::VectorXd q_dot_min_;
+    Eigen::VectorXd q_dot_max_;
 
     int n_joints_;
 
@@ -44,6 +46,13 @@ protected:
 
     void _stop_app();
 
+    void _create_table_data(const std::vector<std::string>& labels,
+                            const std::vector<Eigen::VectorXd>& q_table);
+
+    std::vector<Eigen::VectorXd> _create_vector_for_table_data(const Eigen::VectorXd& min,
+                                                               const Eigen::VectorXd& value,
+                                                               const Eigen::VectorXd& max);
+
 public:
 
     ImguiCoppeliaSimInterface(const juangui_wrapper_parameters& parameters);
@@ -54,6 +63,8 @@ public:
     void show_main_menu_bar();
     void show_coppeliasim_app_parameters();
     void show_table_parameters();
+
+
 
     void show_message_window();
     void show_exit_window();

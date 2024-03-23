@@ -26,6 +26,8 @@ void MyYamlReader::_start_settings()
                 jointnames_ = pos["jointnames"].as<std::vector<std::string>>();
                 q_min_ = pos["q_min"].as<std::vector<double>>();
                 q_max_ = pos["q_max"].as<std::vector<double>>();
+                q_dot_min_ = pos["q_dot_min"].as<std::vector<double>>();
+                q_dot_max_ = pos["q_dot_max"].as<std::vector<double>>();
 
 
                 //auto raw_cs_entity_robot = pos["cs_entity_robot"].as<std::string>() ;
@@ -99,6 +101,13 @@ std::tuple<VectorXd, VectorXd> MyYamlReader::get_joint_limits()
 {
     Eigen::VectorXd q_min_v = JuanchoTools::std_vector_to_eigen_vector(q_min_);
     Eigen::VectorXd q_max_v = JuanchoTools::std_vector_to_eigen_vector(q_max_);
+    return {q_min_v, q_max_v};
+}
+
+std::tuple<VectorXd, VectorXd> MyYamlReader::get_joint_velocity_limits()
+{
+    Eigen::VectorXd q_min_v = JuanchoTools::std_vector_to_eigen_vector(q_dot_min_);
+    Eigen::VectorXd q_max_v = JuanchoTools::std_vector_to_eigen_vector(q_dot_max_);
     return {q_min_v, q_max_v};
 }
 

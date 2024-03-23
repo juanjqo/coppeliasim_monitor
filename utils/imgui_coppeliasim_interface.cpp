@@ -17,6 +17,7 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
     port_ = my_yaml_reader_ptr_->get_port();
     jointnames_ = my_yaml_reader_ptr_->get_jointnames();
     std::tie(q_min_, q_max_) = my_yaml_reader_ptr_->get_joint_limits();
+    std::tie(q_dot_min_, q_dot_max_) = my_yaml_reader_ptr_->get_joint_velocity_limits();
     _check_parameter_sizes();
     vi_ = std::make_shared<DQ_VrepInterface>();
 }
@@ -26,6 +27,10 @@ void ImguiCoppeliaSimInterface::_check_parameter_sizes()
     if (q_min_.size() != q_max_.size() or q_min_.size() != jointnames_.size())
     {
         throw std::runtime_error("Incorrect size of q_min and q_max or jointnames. ");
+    }
+    if (q_dot_min_.size() != q_dot_max_.size() or q_dot_min_.size() != jointnames_.size())
+    {
+        throw std::runtime_error("Incorrect size of q_dot_min and q_dot_max or jointnames. ");
     }
 
     n_joints_ = jointnames_.size();
@@ -40,6 +45,7 @@ void ImguiCoppeliaSimInterface::_stop_app()
     disconnect_coppeliasim();
     this->JuanGui_Wrapper::stop_and_quit(true);
 }
+
 
 void ImguiCoppeliaSimInterface::my_custom_gui()
 {
@@ -288,25 +294,42 @@ void ImguiCoppeliaSimInterface::show_exit_window()
 
 void ImguiCoppeliaSimInterface::show_table_parameters()
 {
-    std::vector<Eigen::VectorXd> q_table(3, VectorXd::Zero(n_joints_));
-    q_table.at(0) = q_min_;
-    q_table.at(1) = q_;
-    q_table.at(2) = q_max_;
-    for(auto& num : q_table)
-    {
 
-        std::cout<<num.transpose()<<std::endl;
-    }
+    auto q_table = _create_vector_for_table_data(q_min_, q_, q_max_);
+    std::vector<std::string> q_labels = {"q_min", "q", "q_max"};
 
+    auto q_dot_table = _create_vector_for_table_data(q_dot_min_, q_dot_, q_dot_max_);
+    std::vector<std::string> q_dot_labels = {"q_dot_min", "q_dot", "q_dot_max"};
 
 
     ImGui::Begin("Joint Positions");
-    ImGui::Text("%s", std::string("q_min     q     q_max").c_str());
-    if (ImGui::BeginTable("split", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
+    _create_table_data(q_labels, q_table);
+    ImGui::End();
+
+    ImGui::Begin("Joint Velocities");
+    _create_table_data(q_dot_labels, q_dot_table);
+    ImGui::End();
+
+}
+
+void ImguiCoppeliaSimInterface::_create_table_data(const std::vector<std::string> &labels,
+                                                   const std::vector<VectorXd> &q_table)
+{
+    if (labels.size() != q_table.size())
     {
-        for (int i = 0; i < n_joints_; i++)
+        throw std::runtime_error("Wrong sizes in labels and q_table.");
+    }
+    if (ImGui::BeginTable("split", labels.size(), ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
+    {
+        for (auto& data : labels)
         {
-            for (int j = 0; j < 3; j++)
+            ImGui::TableNextColumn();
+            ImGui::Text("%s", data.c_str());
+        }
+
+        for (int i = 0; i < q_table.at(0).size(); i++)
+        {
+            for (int j = 0; j < q_table.size(); j++)
             {
                 ImGui::TableNextColumn();
                 ImGui::Button(std::to_string(q_table.at(j)[i]).c_str(), ImVec2(-FLT_MIN, 0.0f));
@@ -314,6 +337,14 @@ void ImguiCoppeliaSimInterface::show_table_parameters()
         }
         ImGui::EndTable();
     }
-    ImGui::End();
-
 }
+
+std::vector<VectorXd> ImguiCoppeliaSimInterface::_create_vector_for_table_data(const VectorXd &min, const VectorXd &value, const VectorXd &max)
+{
+    std::vector<Eigen::VectorXd> q_table(3, VectorXd::Zero(min.size()));
+    q_table.at(0) = min;
+    q_table.at(1) = value;
+    q_table.at(2) = max;
+    return q_table;
+}
+
