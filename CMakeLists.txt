@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(coppeliasim_commander LANGUAGES CXX)
+project(coppeliasim_monitor LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -24,13 +24,6 @@ add_library (${CUSTOM_JUANGUI_WRAPPER}
 target_link_libraries(${CUSTOM_JUANGUI_WRAPPER} juangui_wrapper dqrobotics-interface-vrep)
 
 
-add_library(my_yaml_reader
-           ${CMAKE_CURRENT_SOURCE_DIR}/utils/my_yaml_reader.h
-           ${CMAKE_CURRENT_SOURCE_DIR}/utils/my_yaml_reader.cpp
-            )
-target_link_libraries(my_yaml_reader yaml-cpp::yaml-cpp juancho-tools)
-
-
 
 include(FetchContent)
 
@@ -47,8 +40,17 @@ if(NOT yaml-cpp_POPULATED)
   add_subdirectory(${yaml-cpp_SOURCE_DIR} ${yaml-cpp_BINARY_DIR})
 endif()
 
+add_library(my_yaml_reader
+           ${CMAKE_CURRENT_SOURCE_DIR}/utils/my_yaml_reader.h
+           ${CMAKE_CURRENT_SOURCE_DIR}/utils/my_yaml_reader.cpp
+            )
+target_link_libraries(my_yaml_reader yaml-cpp::yaml-cpp juancho-tools)
 
-add_executable(coppeliasim_commander main.cpp)
+
+
+
+
+add_executable(coppeliasim_monitor main.cpp)
 
 if(UNIX AND NOT APPLE)
 target_link_libraries(${CMAKE_PROJECT_NAME}

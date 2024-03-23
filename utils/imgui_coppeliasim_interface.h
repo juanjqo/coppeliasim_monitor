@@ -39,8 +39,8 @@ public:
 
 
     void my_custom_gui() override;
-    void ShowExampleAppMainMenuBar();
-
+    void show_main_menu_bar();
+    void show_coppeliasim_app_parameters();
 
     void create_sas_driver_buttons();
 

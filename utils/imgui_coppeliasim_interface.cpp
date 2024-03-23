@@ -25,40 +25,8 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
 
 void ImguiCoppeliaSimInterface::my_custom_gui()
 {
-    ShowExampleAppMainMenuBar();
-
-    ImGui::Begin("CoppeliaSim");
-    ImGui::SeparatorText("");
-    //ImVec2 size = ImVec2(32.0f, 32.0f);
-    //ImVec4 my_color = ImVec4(0.13f, 0.26f, 0.40f, 1.0f);
-
-    ImGui::Text("%s", std::string("ip:   " + ip_).c_str());
-    ImGui::Spacing();
-    ImGui::Text("%s", std::string("port: " + std::to_string(port_)).c_str());
-    ImGui::SeparatorText("");
-    create_sas_driver_buttons();
-    ImGui::SeparatorText("");
-
-
-
-    static bool disabled = false;
-    ImGui::Checkbox("Disable", &disabled);
-    if (disabled)
-    {
-        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-    }
-    if (disabled)
-    {
-        ImGui::PopItemFlag();
-        ImGui::PopStyleVar();
-    }
-
-
-
-
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::End();
+    show_main_menu_bar();
+    show_coppeliasim_app_parameters();
 
 
   /*
@@ -207,20 +175,20 @@ void  ImguiCoppeliaSimInterface::_finish_echo_robot_state()
 
 
 
-void ImguiCoppeliaSimInterface::ShowExampleAppMainMenuBar()
+void ImguiCoppeliaSimInterface::show_main_menu_bar()
 {
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
         {
             //ShowExampleMenuFile();
-            if (ImGui::MenuItem("Load configuration file", "CTRL+Z")) {}
+            if (ImGui::MenuItem("Load configuration file")) {}
             ImGui::Separator();
             if (ImGui::MenuItem("Quit"))
             {
                 deinitialize_coppeliasim();
                 disconnect_coppeliasim();
-                this->stop_and_quit(true);
+                this->JuanGui_Wrapper::stop_and_quit(true);
             }
             ImGui::EndMenu();
         }
@@ -234,3 +202,40 @@ void ImguiCoppeliaSimInterface::ShowExampleAppMainMenuBar()
         ImGui::EndMainMenuBar();
     }
 }
+
+void ImguiCoppeliaSimInterface::show_coppeliasim_app_parameters()
+{
+    ImGui::Begin("CoppeliaSim");
+    ImGui::SeparatorText("");
+    //ImVec2 size = ImVec2(32.0f, 32.0f);
+    //ImVec4 my_color = ImVec4(0.13f, 0.26f, 0.40f, 1.0f);
+
+    ImGui::Text("%s", std::string("ip:   " + ip_).c_str());
+    ImGui::Spacing();
+    ImGui::Text("%s", std::string("port: " + std::to_string(port_)).c_str());
+    ImGui::SeparatorText("");
+    create_sas_driver_buttons();
+    ImGui::SeparatorText("");
+
+    static bool disabled = false;
+    ImGui::Checkbox("Disable", &disabled);
+
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::End();
+
+}
+
+
+
+/*
+if (ImGui::BeginTable("split", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
+{
+    for (int i = 0; i < 100; i++)
+    {
+        char buf[32];
+        sprintf(buf, "%03d", i);
+        ImGui::TableNextColumn();
+        ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f));
+    }
+    ImGui::EndTable();
+*/
