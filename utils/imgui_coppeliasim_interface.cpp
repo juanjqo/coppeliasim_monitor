@@ -301,14 +301,16 @@ void ImguiCoppeliaSimInterface::show_table_parameters()
 
 
     ImGui::Begin("Joint Positions");
+    ImGui::Text("%s", std::string("q_min     q     q_max").c_str());
     if (ImGui::BeginTable("split", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
     {
-        for (int i = 0; i < 3*n_joints_; i++)
+        for (int i = 0; i < n_joints_; i++)
         {
-            char buf[32];
-            sprintf(buf, "%03d", i);
-            ImGui::TableNextColumn();
-            ImGui::Button(buf, ImVec2(-FLT_MIN, 0.0f));
+            for (int j = 0; j < 3; j++)
+            {
+                ImGui::TableNextColumn();
+                ImGui::Button(std::to_string(q_table.at(j)[i]).c_str(), ImVec2(-FLT_MIN, 0.0f));
+            }
         }
         ImGui::EndTable();
     }
