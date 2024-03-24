@@ -63,6 +63,7 @@ public:
     void show_main_menu_bar();
     void show_coppeliasim_app_parameters();
     void show_table_parameters();
+    void show_console_window();
 
 
 

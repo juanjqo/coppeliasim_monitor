@@ -24,11 +24,13 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
 
 void ImguiCoppeliaSimInterface::_check_parameter_sizes()
 {
-    if (q_min_.size() != q_max_.size() or q_min_.size() != jointnames_.size())
+    if (static_cast<std::size_t>(q_min_.size()) != static_cast<std::size_t>(q_max_.size())
+        or static_cast<std::size_t>(q_min_.size()) != jointnames_.size())
     {
         throw std::runtime_error("Incorrect size of q_min and q_max or jointnames. ");
     }
-    if (q_dot_min_.size() != q_dot_max_.size() or q_dot_min_.size() != jointnames_.size())
+    if (static_cast<std::size_t>(q_dot_min_.size()) != static_cast<std::size_t>(q_dot_max_.size())
+        or static_cast<std::size_t>(q_dot_min_.size()) != jointnames_.size())
     {
         throw std::runtime_error("Incorrect size of q_dot_min and q_dot_max or jointnames. ");
     }
@@ -52,6 +54,7 @@ void ImguiCoppeliaSimInterface::my_custom_gui()
     show_main_menu_bar();
     show_coppeliasim_app_parameters();
     show_table_parameters();
+    //show_console_window();
 
   /*
     {
@@ -169,10 +172,19 @@ void ImguiCoppeliaSimInterface::_start_echo_robot_state_mode()
 {
     while(!finish_echo_robot_state_)
     {
-        q_ = vi_->get_joint_positions(jointnames_);
-        q_dot_ = vi_->get_joint_velocities(jointnames_);
+        try
+        {
+            q_ = vi_->get_joint_positions(jointnames_);
+            q_dot_ = vi_->get_joint_velocities(jointnames_);
+        }
+        catch (std::exception& e)
+        {
+            set_message_window_parameters(true, e.what());
+            std::cout<<e.what()<<std::endl;
+        }
+
     }
-    status_msg_ = "Finished echo robot state.";
+    show_message_window();
 }
 
 
@@ -310,6 +322,13 @@ void ImguiCoppeliaSimInterface::show_table_parameters()
     _create_table_data(q_dot_labels, q_dot_table);
     ImGui::End();
 
+}
+
+void ImguiCoppeliaSimInterface::show_console_window()
+{
+    ImGui::Begin("Console");
+
+    ImGui::End();
 }
 
 void ImguiCoppeliaSimInterface::_create_table_data(const std::vector<std::string> &labels,
