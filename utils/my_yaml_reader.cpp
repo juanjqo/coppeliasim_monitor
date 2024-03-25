@@ -13,7 +13,7 @@ void MyYamlReader::_start_settings()
         std::cout << "----------------------------------------------" <<std::endl;
         //----------------------------------------------------------------------------------
 
-        int i = 0;
+
         // The outer element is an array
 
         for(auto dict : config) {
@@ -61,7 +61,7 @@ void MyYamlReader::_start_settings()
                                                                   raw_entity_environment_primitive_type))<<std::endl;
 
                 */
-                i++;
+
 
             }
 
