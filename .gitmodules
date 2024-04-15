@@ -1,3 +1,6 @@
 [submodule "submodules/imgui_template"]
 	path = submodules/imgui_template
 	url = https://github.com/juanjqo/imgui_template.git
+[submodule "submodules/capybara_toolkit"]
+	path = submodules/capybara_toolkit
+	url = https://github.com/juanjqo/capybara_toolkit.git
