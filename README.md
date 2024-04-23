@@ -26,7 +26,7 @@ brew install eigen
 brew install yaml-cpp
 ```
 
-### Ubuntu 
+### Ubuntu (Not supported, but I'm working on it!)
 
 
 
