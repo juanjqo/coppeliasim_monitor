@@ -3,7 +3,7 @@
 
 
 ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_parameters &parameters)
-:JuanGui_Wrapper(parameters)
+    :JuanGui_Wrapper(parameters), data_available_(false)
 {
     std::string config_yaml = get_cfg_folder_path() + std::string("config_test.yaml");
     //std::string config_yaml = "/home/juanjqo/git/coppeliasim_commander/cfg/config.yaml";
@@ -19,8 +19,10 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
     std::tie(q_min_, q_max_) = my_yaml_reader_ptr_->get_joint_limits();
     std::tie(q_dot_min_, q_dot_max_) = my_yaml_reader_ptr_->get_joint_velocity_limits();
     _check_parameter_sizes();
-    //vi_ = std::make_shared<DQ_VrepInterface>();
+    coppeliasim_driver_ = std::make_unique<CoppeliaSimDriver>();
+    coppeliasim_driver_->set_parameters(ip_, port_, jointnames_, {q_min_, q_max_}, {q_dot_min_, q_dot_max_});
 }
+
 
 void ImguiCoppeliaSimInterface::_check_parameter_sizes()
 {
@@ -50,6 +52,7 @@ void ImguiCoppeliaSimInterface::_stop_app()
 
 void ImguiCoppeliaSimInterface::my_custom_gui()
 {
+    _update_data_from_driver();
     show_main_menu_bar();
     show_coppeliasim_app_parameters();
     show_table_parameters();
@@ -99,6 +102,7 @@ void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
         button_deinitialize_disable = false;
         status_msg_ = "initializing...";
         initialize_coppeliasim();
+        status_msg_ = "initialized!";
     }
     ImGui::EndDisabled();
 
@@ -109,6 +113,7 @@ void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
         button_disconnect_disable = false;
         status_msg_ = "deinitializing...";
         deinitialize_coppeliasim();
+        status_msg_ = "deinitialized!";
     }
     ImGui::EndDisabled();
 
@@ -117,6 +122,7 @@ void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
     {
         status_msg_ = "disconnecting...";
         disconnect_coppeliasim();
+        status_msg_ = "disconnected!";
     }
     ImGui::EndDisabled();
     ImGui::SeparatorText("");
@@ -126,22 +132,24 @@ void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
 
 void ImguiCoppeliaSimInterface::connect_coppeliasim()
 {
-
+    coppeliasim_driver_->connect();
 }
 
 void ImguiCoppeliaSimInterface::initialize_coppeliasim()
 {
-
+    coppeliasim_driver_->initialize();
+    data_available_ = true;
 }
 
 void ImguiCoppeliaSimInterface::deinitialize_coppeliasim()
 {
-
+    coppeliasim_driver_->deinitialize();
+    data_available_ = false;
 }
 
 void ImguiCoppeliaSimInterface::disconnect_coppeliasim()
 {
-
+    coppeliasim_driver_->disconnect();
 }
 
 
@@ -201,7 +209,24 @@ void ImguiCoppeliaSimInterface::show_coppeliasim_app_parameters()
 }
 
 
+/**
+ * @brief ImguiCoppeliaSimInterface::_update_data_from_driver
+ */
+void ImguiCoppeliaSimInterface::_update_data_from_driver()
+{
+    if (data_available_)
+    {
+        q_ = coppeliasim_driver_->get_configuration_space_positions();
+        q_dot_ = coppeliasim_driver_->get_configuration_space_velocities();
+        simulation_time_ = coppeliasim_driver_->get_simulation_time();
+    }
+}
 
+/**
+ * @brief ImguiCoppeliaSimInterface::set_message_window_parameters
+ * @param flag
+ * @param msg
+ */
 void ImguiCoppeliaSimInterface::set_message_window_parameters(const bool &flag, const std::string &msg)
 {
     show_message_window_ = flag;

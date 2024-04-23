@@ -17,6 +17,10 @@ include(${IMGUI_TEMPLATE_DIR}/dependencies.cmake)
 set (CAPYBARA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/submodules/capybara_toolkit/)
 include(${CAPYBARA_DIR}/capybara_library.cmake)
 
+
+set(COPPELIASIM_DRIVER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/submodules/coppeliasim_driver/)
+include(${COPPELIASIM_DRIVER_DIR}/coppeliasim_driver_library.cmake)
+
 include_directories(${IMGUI_TEMPLATE_DIR}/commons/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils/)
 
@@ -69,6 +73,7 @@ add_executable(coppeliasim_monitor main.cpp)
 if(UNIX AND NOT APPLE)
 target_link_libraries(${CMAKE_PROJECT_NAME}
                       dqrobotics
+                      coppeliasim_driver
                       imgui
                       implot
                       imgui-knobs
@@ -85,6 +90,7 @@ endif()
 if(APPLE)
   target_link_libraries(${CMAKE_PROJECT_NAME}
                           dqrobotics
+                          coppeliasim_driver
                           imgui
                           implot
                           imgui-knobs

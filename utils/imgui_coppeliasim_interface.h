@@ -5,7 +5,7 @@
 #include <my_yaml_reader.h>
 #include <memory>
 #include <filesystem>
-//#include <dqrobotics/interfaces/vrep/DQ_VrepInterface.h>
+#include <coppeliasim_driver.hpp>
 #include <thread>
 #include <atomic>
 
@@ -22,12 +22,16 @@ protected:
     VectorXd q_dot_;
     VectorXd q_dot_min_;
     VectorXd q_dot_max_;
+    double simulation_time_;
 
     int n_joints_;
 
+    bool data_available_;
+    void _update_data_from_driver();
+
     int port_;
     std::string status_msg_;
-    //std::shared_ptr<DQ_VrepInterface> vi_;
+    std::unique_ptr<CoppeliaSimDriver> coppeliasim_driver_;
 
     bool show_message_window_ = false;
     std::string message_window_;
