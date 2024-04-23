@@ -3,7 +3,7 @@
 ![ScreenRecording2024-04-23at12 55 03-ezgif com-video-to-gif-converter](https://github.com/juanjqo/coppeliasim_monitor/assets/23158313/752ca428-49db-4df5-9d47-04605d04c556)
 
 
-CopppeliaSim Monitor is powered by [Dear Imgui](https://github.com/ocornut/imgui) and [DQ Robotics](https://dqrobotics.github.io/).
+CopppeliaSim Monitor is powered by [Dear Imgui](https://github.com/ocornut/imgui), [DQ Robotics](https://dqrobotics.github.io/), and the unofficial [DQ Robotics Coppelia Interface](https://github.com/juanjqo/cpp-interface-coppeliasim).
 
 
 ## Requirements
