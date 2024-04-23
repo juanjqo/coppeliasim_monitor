@@ -5,6 +5,12 @@
 
 CopppeliaSim Monitor is powered by [Dear Imgui](https://github.com/ocornut/imgui), [DQ Robotics](https://dqrobotics.github.io/), and the unofficial [DQ Robotics Coppelia Interface](https://github.com/juanjqo/cpp-interface-coppeliasim).
 
+| CoppeliaSim  | SO | Status |
+| ------------- | ------------- |------------- |
+| ![Static Badge](https://img.shields.io/badge/CoppeliaSim-4.6.0--rev18-orange)![Static Badge](https://img.shields.io/badge/arm64-blue)| macOS Sonoma (Apple Silicon) | ![Static Badge](https://img.shields.io/badge/experimental-red)|
+| ![Static Badge](https://img.shields.io/badge/CoppeliaSim-4.6.0--rev18-orange)![Static Badge](https://img.shields.io/badge/x64-blue)   | Ubuntu 22.04 LTS  |  ![Static Badge](https://img.shields.io/badge/Unsupported-gray)|
+| ![Static Badge](https://img.shields.io/badge/CoppeliaSim-4.6.0--rev18-orange)![Static Badge](https://img.shields.io/badge/x64-blue)   | Windows 11  |  ![Static Badge](https://img.shields.io/badge/Unsupported-gray)
+
 
 ## Requirements
 
