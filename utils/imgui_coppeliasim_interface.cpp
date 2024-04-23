@@ -19,7 +19,7 @@ ImguiCoppeliaSimInterface::ImguiCoppeliaSimInterface(const juangui_wrapper_param
     std::tie(q_min_, q_max_) = my_yaml_reader_ptr_->get_joint_limits();
     std::tie(q_dot_min_, q_dot_max_) = my_yaml_reader_ptr_->get_joint_velocity_limits();
     _check_parameter_sizes();
-    vi_ = std::make_shared<DQ_VrepInterface>();
+    //vi_ = std::make_shared<DQ_VrepInterface>();
 }
 
 void ImguiCoppeliaSimInterface::_check_parameter_sizes()
@@ -38,7 +38,6 @@ void ImguiCoppeliaSimInterface::_check_parameter_sizes()
     n_joints_ = jointnames_.size();
     q_ = Eigen::VectorXd::Zero(n_joints_);
     q_dot_= Eigen::VectorXd::Zero(n_joints_);
-
 }
 
 void ImguiCoppeliaSimInterface::_stop_app()
@@ -127,87 +126,24 @@ void ImguiCoppeliaSimInterface::create_sas_driver_buttons()
 
 void ImguiCoppeliaSimInterface::connect_coppeliasim()
 {
-    try
-    {
-        if (!vi_->connect(ip_, port_,100,10))
-            throw std::runtime_error("Unable to connect to CoppeliaSim.");
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        status_msg_ = "connected!";
-    }
-    catch (std::exception& e)
-    {
-        std::cout<<e.what()<<std::endl;
-        vi_->stop_simulation();
-        vi_->disconnect();
-    }
+
 }
 
 void ImguiCoppeliaSimInterface::initialize_coppeliasim()
 {
-    vi_->start_simulation();
-    status_msg_ = "Initialized!";
-    _start_echo_robot_state_mode_thread();
+
 }
 
 void ImguiCoppeliaSimInterface::deinitialize_coppeliasim()
 {
-    vi_->stop_simulation();
-    status_msg_ = "Deinitialized!";
-    _finish_echo_robot_state();
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    if (echo_robot_state_mode_thread_.joinable())
-    {
-        echo_robot_state_mode_thread_.join();
-    }
 
 }
 
 void ImguiCoppeliaSimInterface::disconnect_coppeliasim()
 {
-   vi_->disconnect();
-    status_msg_ = "Disconnected!";
+
 }
 
-void ImguiCoppeliaSimInterface::_start_echo_robot_state_mode()
-{
-    while(!finish_echo_robot_state_)
-    {
-        try
-        {
-            q_ = vi_->get_joint_positions(jointnames_);
-            q_dot_ = vi_->get_joint_velocities(jointnames_);
-        }
-        catch (std::exception& e)
-        {
-            set_message_window_parameters(true, e.what());
-            std::cout<<e.what()<<std::endl;
-        }
-
-    }
-    show_message_window();
-}
-
-
-
-void  ImguiCoppeliaSimInterface::_start_echo_robot_state_mode_thread()
-{
-    finish_echo_robot_state_ = false;
-    status_msg_ = "Checking echo robot state thread";
-    if (echo_robot_state_mode_thread_.joinable())
-    {
-        echo_robot_state_mode_thread_.join();
-    }
-    status_msg_ ="Starting echo robot state thread";
-    echo_robot_state_mode_thread_ = std::thread(&ImguiCoppeliaSimInterface::_start_echo_robot_state_mode, this);
-}
-
-
-void  ImguiCoppeliaSimInterface::_finish_echo_robot_state()
-{
-    status_msg_ = "Finishing echo robot state.";
-    finish_echo_robot_state_ = true;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-}
 
 
 

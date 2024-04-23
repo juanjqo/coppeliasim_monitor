@@ -14,6 +14,9 @@ add_custom_target(cfg ALL WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} SOURCES ${EXTR
 set(IMGUI_TEMPLATE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/submodules/imgui_template)
 include(${IMGUI_TEMPLATE_DIR}/dependencies.cmake)
 
+set (CAPYBARA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/submodules/capybara_toolkit/)
+include(${CAPYBARA_DIR}/capybara_library.cmake)
+
 include_directories(${IMGUI_TEMPLATE_DIR}/commons/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils/)
 
@@ -22,16 +25,8 @@ add_library (${CUSTOM_JUANGUI_WRAPPER}
              ${CMAKE_CURRENT_SOURCE_DIR}/utils/${CUSTOM_JUANGUI_WRAPPER}.h
              ${CMAKE_CURRENT_SOURCE_DIR}/utils/${CUSTOM_JUANGUI_WRAPPER}.cpp
              )
-target_link_libraries(${CUSTOM_JUANGUI_WRAPPER} juangui_wrapper dqrobotics-interface-vrep)
+target_link_libraries(${CUSTOM_JUANGUI_WRAPPER} juangui_wrapper)
 
-
-add_library(coppeliasim_driver
-            ${CMAKE_CURRENT_SOURCE_DIR}/utils/coppeliasim_driver.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/utils/coppeliasim_driver.cpp)
-target_link_libraries(coppeliasim_driver
-    dqrobotics
-    dqrobotics-interface-vrep
-    yaml-cpp::yaml-cpp)
 
 
 include(FetchContent)
@@ -74,7 +69,6 @@ add_executable(coppeliasim_monitor main.cpp)
 if(UNIX AND NOT APPLE)
 target_link_libraries(${CMAKE_PROJECT_NAME}
                       dqrobotics
-                      dqrobotics-interface-vrep
                       imgui
                       implot
                       imgui-knobs
@@ -84,13 +78,13 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${CUSTOM_JUANGUI_WRAPPER}
                       my_yaml_reader
                       yaml-cpp::yaml-cpp
+                      capybara
                       )
 endif()
 
 if(APPLE)
   target_link_libraries(${CMAKE_PROJECT_NAME}
                           dqrobotics
-                          dqrobotics-interface-vrep
                           imgui
                           implot
                           imgui-knobs
@@ -98,6 +92,7 @@ if(APPLE)
                           juancho-tools
                           glfw
                           my_yaml_reader
+                          capybara
                           yaml-cpp::yaml-cpp
                           "-framework Cocoa"
                           "-framework OpenGL"
