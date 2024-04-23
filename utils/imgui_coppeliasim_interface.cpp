@@ -204,6 +204,7 @@ void ImguiCoppeliaSimInterface::show_coppeliasim_app_parameters()
     ImGui::Checkbox("Disable", &disabled);
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Simulation time (s): %.3f", simulation_time_);
     ImGui::End();
 
 }
@@ -309,7 +310,7 @@ void ImguiCoppeliaSimInterface::_create_table_data(const std::vector<std::string
 
         for (int i = 0; i < q_table.at(0).size(); i++)
         {
-            for (int j = 0; j < q_table.size(); j++)
+            for (std::size_t j = 0; j < q_table.size(); j++)
             {
                 ImGui::TableNextColumn();
                 ImGui::Button(std::to_string(q_table.at(j)[i]).c_str(), ImVec2(-FLT_MIN, 0.0f));

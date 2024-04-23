@@ -12,7 +12,7 @@ int main()
     parameters.title = "CoppeliaSim Commander by Juan Jose Quiroz Omana";
     parameters.screen_mode = "LIGHT_MODE";
     parameters.font_path = "default";
-    parameters.font_size = 25;
+    parameters.font_size = 16;
 
     ImguiCoppeliaSimInterface imgui_coppeliasim_interface(parameters);
 

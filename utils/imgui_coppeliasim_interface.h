@@ -22,7 +22,7 @@ protected:
     VectorXd q_dot_;
     VectorXd q_dot_min_;
     VectorXd q_dot_max_;
-    double simulation_time_;
+    double simulation_time_ = 0.0;
 
     int n_joints_;
 
