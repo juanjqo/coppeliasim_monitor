@@ -56,6 +56,7 @@ void ImguiCoppeliaSimInterface::my_custom_gui()
     show_main_menu_bar();
     show_coppeliasim_app_parameters();
     show_table_parameters();
+    show_joint_position_plots();
     //show_console_window();
 
   /*
@@ -289,6 +290,27 @@ void ImguiCoppeliaSimInterface::show_table_parameters()
 void ImguiCoppeliaSimInterface::show_console_window()
 {
     ImGui::Begin("Console");
+
+    ImGui::End();
+}
+
+void ImguiCoppeliaSimInterface::show_joint_position_plots()
+{
+    ImGui::Begin("Joint Positions plots");
+    static auto hp = HarryPlotter(q_.size(),
+                                          HarryPlotter::TYPE::DYNAMIC_BACKGROUND);
+    static float t = 0;
+    t += ImGui::GetIO().DeltaTime;
+    hp.add_points(t, q_);
+    static float history = 100.0f;
+    ImGui::SliderFloat("History",&history,10, 1000,"%.1f s");
+    std::vector<std::string> tags = {"q1", "q2", "q3", "q4", "q5", "q6", "q7"};
+    std::tuple<float, float> yaxis_limits = {-2*M_PI, 2*M_PI};
+    static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
+    hp.set_tags(tags);
+    hp.set_vertical_plot_size(250);
+    hp.set_yaxis(yaxis_limits);
+    hp.plot_data("Joint Positions", t, history, flags);
 
     ImGui::End();
 }

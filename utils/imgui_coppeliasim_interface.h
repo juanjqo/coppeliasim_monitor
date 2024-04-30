@@ -8,6 +8,7 @@
 #include <coppeliasim_driver.hpp>
 #include <thread>
 #include <atomic>
+#include <harry_plotter.h>
 
 
 class ImguiCoppeliaSimInterface: public JuanGui_Wrapper
@@ -62,6 +63,8 @@ public:
     void show_coppeliasim_app_parameters();
     void show_table_parameters();
     void show_console_window();
+
+    void show_joint_position_plots();
 
 
 

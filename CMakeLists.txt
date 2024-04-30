@@ -77,6 +77,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       imgui
                       implot
                       imgui-knobs
+                      harry_plotter
                       glfw
                       juancho-tools
                       OpenGL::GL
@@ -94,6 +95,7 @@ if(APPLE)
                           imgui
                           implot
                           imgui-knobs
+                          harry_plotter
                           ${CUSTOM_JUANGUI_WRAPPER}
                           juancho-tools
                           glfw
