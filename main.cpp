@@ -13,7 +13,7 @@ int main()
     parameters.screen_mode = "LIGHT_MODE";
     parameters.font_path = "default";
     parameters.font_size = 14;
-    //parameters.high_resolution_display = true;
+    parameters.high_resolution_display = true;
 
     ImguiCoppeliaSimInterface imgui_coppeliasim_interface(parameters);
 
