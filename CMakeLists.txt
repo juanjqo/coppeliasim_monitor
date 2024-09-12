@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(coppeliasim_monitor LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #Add custom (non compiling) targets so launch scripts and python files show up in QT Creator's project view.
